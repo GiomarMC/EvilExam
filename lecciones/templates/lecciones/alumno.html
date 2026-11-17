@@ -1,0 +1,148 @@
+{% load static %}<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf" content="{{ csrf_token }}">
+  <title>Lección oral · Diseño de Patrones</title>
+  <link rel="icon" href="{% static 'lecciones/utp.png' %}">
+  <link rel="stylesheet" href="{% static 'lecciones/app.css' %}">
+</head>
+<body data-stage="{% if abierto %}ingreso{% else %}cerrado{% endif %}">
+
+  <div class="fondo" aria-hidden="true"><i></i><i></i><i></i></div>
+
+  <header class="barra">
+    <img src="{% static 'lecciones/utp.png' %}" alt="Universidad Tecnológica del Perú">
+    <span class="curso">Diseño de Patrones <em>Lección oral</em></span>
+    <span class="rec" id="rec"><b></b>Grabando</span>
+  </header>
+
+  <main class="escena">
+
+    <!-- Fuera de horario -->
+    <section class="stage{% if not abierto %} on{% endif %}" data-stage="cerrado">
+      <div class="glass tarjeta centro">
+        <div class="icono">◔</div>
+        <h1>La lección no está disponible</h1>
+        {% if proxima %}<p>Próxima apertura: <strong>{{ proxima }}</strong> (hora de Lima).</p>
+        {% else %}<p>Aún no hay una próxima apertura programada. Consulta con tu docente.</p>{% endif %}
+      </div>
+    </section>
+
+    <!-- 1. Ingreso -->
+    <section class="stage{% if abierto %} on{% endif %}" data-stage="ingreso">
+      <form class="glass tarjeta" id="form-ingreso" novalidate>
+        <p class="paso">Paso 1 de 4</p>
+        <h1>Lección oral</h1>
+        <p>Ingresa tus datos para comenzar. Necesitas una PC con cámara y micrófono.</p>
+        <label>Nombre completo
+          <input name="nombre" autocomplete="name" required minlength="3" maxlength="120" placeholder="Juan Pérez">
+        </label>
+        <label>Correo
+          <input name="correo" type="email" autocomplete="email" required placeholder="u00000000@utp.edu.pe">
+        </label>
+        <p class="error" id="error-ingreso" role="alert"></p>
+        <button class="btn" type="submit">Continuar</button>
+      </form>
+    </section>
+
+    <!-- 2. Consentimiento y permisos -->
+    <section class="stage" data-stage="permisos">
+      <div class="glass tarjeta">
+        <p class="paso">Paso 2 de 4</p>
+        <h1>Cámara y micrófono</h1>
+        <p>Durante la lección se <strong>graban tu rostro y tu voz</strong>. El video se guarda en el
+           almacenamiento del curso y solo lo revisa tu docente.</p>
+        <p>Al continuar aceptas la grabación. El navegador te pedirá permiso para usar la cámara y el micrófono.</p>
+        <p class="error" id="error-permisos" role="alert"></p>
+        <button class="btn" id="btn-permisos">Acepto y permitir acceso</button>
+      </div>
+    </section>
+
+    <!-- 3. Chequeo facial -->
+    <section class="stage" data-stage="chequeo">
+      <div class="glass tarjeta ancha">
+        <p class="paso">Paso 3 de 4</p>
+        <h1>Chequeo de cámara</h1>
+        <div class="chequeo">
+          <div class="visor"><video id="preview" autoplay muted playsinline></video></div>
+          <div>
+            <p>Mira a la pantalla, de frente y con buena luz.</p>
+            <ul class="lista" id="lista-chequeo">
+              <li data-k="rostro">Rostro detectado</li>
+              <li data-k="luz">Iluminación</li>
+              <li data-k="encuadre">Encuadre</li>
+              <li data-k="mic">Micrófono</li>
+            </ul>
+            <p class="nota" id="nota-chequeo">Preparando la detección…</p>
+            <button class="btn" id="btn-chequeo" disabled>Continuar</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Aviso -->
+    <section class="stage" data-stage="aviso">
+      <div class="glass tarjeta">
+        <p class="paso">Paso 4 de 4</p>
+        <h1>Antes de empezar</h1>
+        <ul class="reglas">
+          <li>Primero lees cada pregunta <strong>en silencio</strong>; después respondes en voz alta.</li>
+          <li>Las fases avanzan solas. No puedes saltar ni retroceder.</li>
+          <li>Mantén la mirada en la pantalla durante toda la lección.</li>
+          <li>Si recargas o cierras la pestaña, la lección queda interrumpida.</li>
+        </ul>
+        <p class="aviso">El examen empezará y no podrás volver atrás.</p>
+        <p class="error" id="error-aviso" role="alert"></p>
+        <button class="btn" id="btn-empezar">Empezar examen</button>
+      </div>
+    </section>
+
+    <!-- 5. Examen -->
+    <section class="stage" data-stage="examen">
+      <div class="glass tarjeta examen" id="examen" data-fase="lectura">
+        <div class="examen-top">
+          <span class="chip" id="chip">Lectura en silencio</span>
+          <span class="progreso" id="progreso-texto">Pregunta 1 de 5</span>
+        </div>
+        <p class="pregunta" id="pregunta" aria-live="polite"></p>
+        <div class="examen-pie">
+          <div class="reloj">
+            <svg viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="pista" cx="60" cy="60" r="54"/>
+              <circle class="arco" id="arco" cx="60" cy="60" r="54"/>
+            </svg>
+            <span id="contador">15</span>
+          </div>
+          <p class="instruccion" id="instruccion">Lee la pregunta en silencio.</p>
+          <div class="puntos" id="puntos"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Subida -->
+    <section class="stage" data-stage="subida">
+      <div class="glass tarjeta centro">
+        <h1>Enviando tu lección</h1>
+        <p id="texto-subida">No cierres esta pestaña.</p>
+        <div class="barra-subida"><i id="barra-subida"></i></div>
+        <button class="btn" id="btn-reintentar" hidden>Reintentar envío</button>
+      </div>
+    </section>
+
+    <!-- 7. Confirmación -->
+    <section class="stage" data-stage="fin">
+      <div class="glass tarjeta centro">
+        <div class="icono ok">✓</div>
+        <h1>Tu lección fue enviada</h1>
+        <p id="texto-fin">Ya puedes cerrar esta pestaña.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <video id="camara" autoplay muted playsinline aria-hidden="true"></video>
+  <script src="{% static 'lecciones/app.js' %}"></script>
+</body>
+</html>

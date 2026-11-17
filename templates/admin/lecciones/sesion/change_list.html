@@ -1,0 +1,7 @@
+{% extends "admin/change_list.html" %}
+{% block content %}
+<div class="contadores">
+  {% for etiqueta, valor in contadores %}<div><b>{{ valor }}</b><span>{{ etiqueta }}</span></div>{% endfor %}
+</div>
+{{ block.super }}
+{% endblock %}

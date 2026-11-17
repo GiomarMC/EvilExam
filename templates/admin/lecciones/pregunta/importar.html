@@ -1,0 +1,21 @@
+{% extends "admin/base_site.html" %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">Inicio</a> &rsaquo;
+  <a href="{% url 'admin:lecciones_pregunta_changelist' %}">Preguntas</a> &rsaquo; Importar CSV
+</div>
+{% endblock %}
+{% block content %}
+<form method="post" enctype="multipart/form-data" style="max-width:560px">
+  {% csrf_token %}
+  <p>Sube el banco en CSV. Se detectan la codificación y el separador, se reconocen las columnas
+     aunque estén en otro orden o sin encabezado, y se descartan filas vacías o duplicadas.
+     La única columna obligatoria es <strong>Pregunta</strong>.</p>
+  <p><input type="file" name="archivo" accept=".csv,.txt" required></p>
+  <p>
+    <label><input type="radio" name="modo" value="agregar" checked> Agregar al banco</label><br>
+    <label><input type="radio" name="modo" value="reemplazar"> Reemplazar el banco completo</label>
+  </p>
+  <input type="submit" value="Importar" class="default" style="float:none">
+</form>
+{% endblock %}

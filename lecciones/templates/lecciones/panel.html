@@ -1,0 +1,94 @@
+{% load static %}<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf" content="{{ csrf_token }}">
+  <title>Monitoreo · Lecciones orales</title>
+  <link rel="icon" href="{% static 'lecciones/utp.png' %}">
+  <link rel="stylesheet" href="{% static 'lecciones/app.css' %}">
+  <link rel="stylesheet" href="{% static 'lecciones/panel.css' %}">
+</head>
+<body class="panel">
+  <div class="fondo" aria-hidden="true"><i></i><i></i><i></i></div>
+
+  <header class="cabecera glass">
+    <img src="{% static 'lecciones/utp.png' %}" alt="UTP">
+    <span class="curso">Diseño de Patrones <em>Monitoreo de lecciones orales</em></span>
+    <nav>
+      <a href="{% url 'admin:lecciones_pregunta_changelist' %}">Banco de preguntas</a>
+      <a href="{% url 'admin:lecciones_horario_changelist' %}">Horario</a>
+      <a href="{% url 'admin:lecciones_configuracion_changelist' %}">Configuración</a>
+      <form method="post" action="{% url 'admin:logout' %}">{% csrf_token %}<button>Salir</button></form>
+    </nav>
+  </header>
+
+  <main class="contenido">
+
+    <section class="estado-examen glass" id="apertura" data-abierto="">
+      <div>
+        <span class="luz"></span>
+        <strong id="apertura-titulo">Cargando…</strong>
+        <small id="apertura-detalle"></small>
+      </div>
+      <div class="segmentos" role="group" aria-label="Apertura del examen">
+        <button data-valor="auto">Según horario</button>
+        <button data-valor="abierto">Abrir ahora</button>
+        <button data-valor="cerrado">Cerrar ahora</button>
+      </div>
+    </section>
+
+    <section class="tarjetas" id="contadores">
+      <button class="glass dato" data-filtro=""><b data-k="total">–</b><span>Ingresos</span></button>
+      <button class="glass dato vivo" data-filtro="en_examen"><b data-k="en_examen">–</b><span>En examen</span></button>
+      <button class="glass dato" data-filtro="enviado"><b data-k="enviado">–</b><span>Enviados</span></button>
+      <button class="glass dato" data-filtro="problema"><b data-k="interrumpido">–</b><span>Interrumpidos</span></button>
+      <button class="glass dato" data-filtro="alertas"><b data-k="con_alertas">–</b><span>Con alertas</span></button>
+      <div class="glass dato"><b data-k="promedio">–</b><span>Nota promedio</span></div>
+    </section>
+
+    <section class="glass lista">
+      <div class="herramientas">
+        <input type="search" id="buscar" placeholder="Buscar alumno o correo…" aria-label="Buscar">
+        <div class="chips" id="chips">
+          <button data-filtro="" class="on">Todos</button>
+          <button data-filtro="en_examen">En examen</button>
+          <button data-filtro="enviado">Enviados</button>
+          <button data-filtro="problema">Interrumpidos</button>
+          <button data-filtro="alertas">Con alertas</button>
+          <button data-filtro="ingreso">Sin empezar</button>
+        </div>
+        <span class="en-vivo" id="en-vivo"><b></b>En vivo</span>
+      </div>
+
+      <div class="tabla-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th class="check"><input type="checkbox" id="todos" aria-label="Seleccionar todos"></th>
+              <th>Alumno</th><th>Ingreso</th><th>Estado</th><th>Alertas</th><th>Nota</th><th>Análisis</th>
+            </tr>
+          </thead>
+          <tbody id="filas"></tbody>
+        </table>
+        <p class="vacio" id="vacio" hidden>No hay sesiones que coincidan.</p>
+      </div>
+
+      <div class="acciones" id="acciones">
+        <span id="n-sel">0 seleccionados</span>
+        <button data-accion="habilitar">Habilitar nuevo intento</button>
+        <button data-accion="reprocesar">Reprocesar análisis</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="velo" id="velo"></div>
+  <aside class="cajon glass" id="cajon" aria-hidden="true">
+    <button class="cerrar" id="cerrar" aria-label="Cerrar">✕</button>
+    <div id="cajon-contenido"></div>
+  </aside>
+
+  <div class="aviso-flotante" id="toast" role="status"></div>
+  <script src="{% static 'lecciones/panel.js' %}"></script>
+</body>
+</html>

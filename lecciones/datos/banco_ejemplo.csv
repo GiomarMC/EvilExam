@@ -1,0 +1,19 @@
+N°,Categoría,Patrón,Pregunta
+1,Estructural,Adapter,¿Qué problema resuelve el patrón Adapter y en qué situaciones resulta conveniente utilizarlo?
+2,Estructural,Decorator,¿Cómo permite el patrón Decorator agregar responsabilidades a un objeto sin modificar su clase?
+3,Estructural,Facade,¿Qué ventajas ofrece el patrón Facade al trabajar con un subsistema complejo?
+4,Estructural,Composite,¿Cómo trata el patrón Composite de forma uniforme a objetos individuales y a grupos de objetos?
+5,Estructural,Proxy,¿En qué se diferencia un Proxy del objeto real y para qué casos se usa?
+6,Estructural,Bridge,¿Qué separa el patrón Bridge y por qué esa separación facilita la extensión del sistema?
+7,Comportamiento,Observer,¿Cómo se comunican el sujeto y los observadores en el patrón Observer?
+8,Comportamiento,Strategy,¿Qué problema resuelve el patrón Strategy frente a usar muchas sentencias condicionales?
+9,Comportamiento,Command,¿Qué encapsula el patrón Command y qué operaciones facilita como deshacer o encolar?
+10,Comportamiento,State,¿En qué se diferencia el patrón State del patrón Strategy?
+11,Comportamiento,Template Method,¿Qué define la clase base y qué dejan a las subclases en el patrón Template Method?
+12,Comportamiento,Iterator,¿Qué beneficio aporta el patrón Iterator al recorrer una colección?
+13,Comportamiento,Chain of Responsibility,¿Cómo se decide qué objeto atiende una petición en Chain of Responsibility?
+14,Integración,Adapter y Facade,¿En qué se diferencian Adapter y Facade si ambos envuelven a otras clases?
+15,Integración,Decorator y Proxy,¿Cómo distinguirías un Decorator de un Proxy si su estructura es casi idéntica?
+16,Integración,Observer y Mediator,¿Cuándo preferirías un Mediator en lugar de conectar los objetos con Observer?
+17,Integración,Strategy y Factory Method,¿Cómo se pueden combinar Strategy y Factory Method en un mismo diseño?
+18,Integración,Composite e Iterator,¿Por qué suelen usarse juntos los patrones Composite e Iterator?
